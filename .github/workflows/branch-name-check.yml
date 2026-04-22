@@ -2,8 +2,8 @@ name: Branch Name Check
 
 on:
   push:
-    branches:
-      - '**'
+    branches-ignore:
+      - main
 
 jobs:
   check-branch-name:
@@ -14,8 +14,8 @@ jobs:
         run: |
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
 
-          if [[ ! "$BRANCH_NAME" =~ ^(feature\/.*|bugfix\/.*|main)$ ]]; then
+          if [[ ! "$BRANCH_NAME" =~ ^(feature\/.+|bugfix\/.+)$ ]]; then
             echo "Invalid branch name: $BRANCH_NAME"
-            echo "Branch must start with feature/ or bugfix/"
+            echo "Branch must start with feature/ or bugfix/ (followed by a name)"
             exit 1
           fi
