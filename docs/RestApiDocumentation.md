@@ -1,4 +1,4 @@
-# Priority-Based Task Scheduler API Plan
+# Orchestrix Plan
 
 **Base URL:** /api
 **Format:** application/json

@@ -1,4 +1,4 @@
-# ER Diagram — Priority-Based Task Scheduler
+# ER Diagram — Orchestrix
 
 Типовете са написани в Java/JPA стил (Long, String, LocalDateTime, Enum), така че схемата е неутрална спрямо избора на база данни (MySQL / PostgreSQL).
 

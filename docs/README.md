@@ -1,6 +1,6 @@
 # Project Documentation
 
-Документация за **Priority-Based Task Scheduler with Dependency Resolution**.
+Документация за **Orchestrix**.
 
 ## Съдържание
 
