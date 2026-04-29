@@ -2,10 +2,14 @@ package com.orchestrix.user.service;
 
 import com.orchestrix.user.entity.Role;
 import com.orchestrix.user.entity.User;
+import com.orchestrix.user.exception.InvalidPasswordException;
 import com.orchestrix.user.exception.UserAlreadyExistsException;
+import com.orchestrix.user.exception.UserNotFoundException;
 import com.orchestrix.user.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -24,5 +28,19 @@ public class UserService {
         }
 
         users.save(new User(email, encoder.encode(password), name, Role.USER));
+    }
+
+    public User login(String email, String password) {
+        Optional<User> user = users.findByEmail(email);
+
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("Invalid credentials.");
+        }
+
+        if (!encoder.matches(password, user.get().getPasswordHash())) {
+            throw new InvalidPasswordException("Invalid credentials.");
+        }
+
+        return user.get();
     }
 }
