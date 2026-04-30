@@ -4,6 +4,8 @@ import com.orchestrix.security.JwtService;
 import com.orchestrix.user.dto.AuthResponse;
 import com.orchestrix.user.dto.LoginRequest;
 import com.orchestrix.user.dto.RegisterRequest;
+import com.orchestrix.user.entity.Role;
+import com.orchestrix.user.entity.User;
 import com.orchestrix.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -28,15 +30,15 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterRequest request) {
         userService.register(request.email(), request.password(), request.name());
-        String token = jwtService.generateToken(request.email());
+        String token = jwtService.generateToken(request.email(), Role.USER);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new AuthResponse(token, request.email()));
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
-        userService.login(request.email(), request.password());
-        String token = jwtService.generateToken(request.email());
+        User user = userService.login(request.email(), request.password());
+        String token = jwtService.generateToken(user.getEmail(), user.getRole());
         return ResponseEntity.ok()
                 .body(new AuthResponse(token, request.email()));
     }

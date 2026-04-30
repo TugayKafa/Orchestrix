@@ -1,5 +1,6 @@
 package com.orchestrix.security;
 
+import com.orchestrix.user.entity.Role;
 import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,10 @@ public class JwtService {
 
     private final SecretKey key = Jwts.SIG.HS256.key().build();
 
-    public String generateToken(String email) {
+    public String generateToken(String email, Role role) {
         return Jwts.builder()
                 .subject(email)
+                .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(new Date(
                         System.currentTimeMillis() + MILLIS_IN_SECS * SECS_IN_MIN * MINS_IN_HOUR))
@@ -31,5 +33,14 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+    }
+
+    public String extractRole(String token) {
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("role", String.class);
     }
 }

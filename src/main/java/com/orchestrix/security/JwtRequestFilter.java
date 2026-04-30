@@ -15,6 +15,7 @@ import java.io.IOException;
 public class JwtRequestFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String TOKEN_TYPE = "Bearer ";
+    private static final String ROLE_PREFIX = "ROLE_";
 
     private final JwtService jwtService;
 
@@ -36,13 +37,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String token = authHeader.substring(TOKEN_TYPE.length());
         String email = jwtService.extractEmail(token);
+        String role = jwtService.extractRole(token);
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(
                             email,
                             null,
-                            AuthorityUtils.createAuthorityList("ROLE_USER")
+                            AuthorityUtils.createAuthorityList(ROLE_PREFIX + role)
                     );
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
