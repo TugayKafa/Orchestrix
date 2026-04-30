@@ -70,7 +70,7 @@ public class User {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public @NotBlank String getPasswordHash() {
+    public String getPasswordHash() {
         return passwordHash;
     }
 
