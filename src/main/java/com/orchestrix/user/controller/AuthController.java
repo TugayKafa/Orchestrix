@@ -61,4 +61,17 @@ public class AuthController {
                         )
                 );
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AccessTokenResponse> refreshToken(@RequestBody @Valid RefreshRequest request) {
+        String accessToken = refreshTokenService.generateAccessToken(request.token());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new AccessTokenResponse(accessToken));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestBody @Valid RefreshRequest request) {
+        refreshTokenService.revokeToken(request.token());
+        return ResponseEntity.noContent().build();
+    }
 }
