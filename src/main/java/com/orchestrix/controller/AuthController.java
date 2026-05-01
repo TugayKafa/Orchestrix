@@ -1,14 +1,14 @@
-package com.orchestrix.user.controller;
+package com.orchestrix.controller;
 
-import com.orchestrix.security.AccessTokenResponse;
+import com.orchestrix.dto.AccessTokenResponse;
+import com.orchestrix.dto.AuthResponse;
+import com.orchestrix.dto.LoginRequest;
+import com.orchestrix.dto.RefreshRequest;
+import com.orchestrix.dto.RegisterRequest;
+import com.orchestrix.entity.User;
 import com.orchestrix.security.JwtService;
-import com.orchestrix.security.RefreshRequest;
-import com.orchestrix.security.RefreshTokenService;
-import com.orchestrix.user.dto.AuthResponse;
-import com.orchestrix.user.dto.LoginRequest;
-import com.orchestrix.user.dto.RegisterRequest;
-import com.orchestrix.user.entity.User;
-import com.orchestrix.user.service.UserService;
+import com.orchestrix.service.RefreshTokenService;
+import com.orchestrix.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

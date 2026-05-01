@@ -1,9 +1,12 @@
-package com.orchestrix.security;
+package com.orchestrix.service;
 
+import com.orchestrix.entity.RefreshToken;
+import com.orchestrix.entity.User;
 import com.orchestrix.exception.RefreshTokenExpiredException;
 import com.orchestrix.exception.RefreshTokenNotFoundException;
 import com.orchestrix.exception.RefreshTokenRevokedException;
-import com.orchestrix.user.entity.User;
+import com.orchestrix.repository.RefreshTokenRepository;
+import com.orchestrix.security.JwtService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

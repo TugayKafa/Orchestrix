@@ -1,4 +1,4 @@
-package com.orchestrix.user.entity;
+package com.orchestrix.entity;
 
 public enum Role {
     USER,

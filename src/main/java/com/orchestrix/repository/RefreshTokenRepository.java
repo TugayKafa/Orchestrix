@@ -1,5 +1,6 @@
-package com.orchestrix.security;
+package com.orchestrix.repository;
 
+import com.orchestrix.entity.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,8 +1,5 @@
 package com.orchestrix.exception;
 
-import com.orchestrix.user.exception.InvalidPasswordException;
-import com.orchestrix.user.exception.UserAlreadyExistsException;
-import com.orchestrix.user.exception.UserNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;

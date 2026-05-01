@@ -1,11 +1,11 @@
-package com.orchestrix.user.service;
+package com.orchestrix.service;
 
-import com.orchestrix.user.entity.Role;
-import com.orchestrix.user.entity.User;
-import com.orchestrix.user.exception.InvalidPasswordException;
-import com.orchestrix.user.exception.UserAlreadyExistsException;
-import com.orchestrix.user.exception.UserNotFoundException;
-import com.orchestrix.user.repository.UserRepository;
+import com.orchestrix.entity.Role;
+import com.orchestrix.entity.User;
+import com.orchestrix.exception.InvalidPasswordException;
+import com.orchestrix.exception.UserAlreadyExistsException;
+import com.orchestrix.exception.UserNotFoundException;
+import com.orchestrix.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

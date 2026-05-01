@@ -1,4 +1,4 @@
-package com.orchestrix.security;
+package com.orchestrix.dto;
 
 public record AccessTokenResponse(String accessToken) {
 }

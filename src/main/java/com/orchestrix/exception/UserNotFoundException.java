@@ -1,4 +1,4 @@
-package com.orchestrix.user.exception;
+package com.orchestrix.exception;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(String message, Throwable cause) {

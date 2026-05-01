@@ -1,4 +1,4 @@
-package com.orchestrix.user.exception;
+package com.orchestrix.exception;
 
 public class InvalidPasswordException extends RuntimeException {
     public InvalidPasswordException(String message, Throwable cause) {

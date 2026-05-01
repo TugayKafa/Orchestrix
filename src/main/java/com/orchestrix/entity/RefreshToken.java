@@ -1,6 +1,5 @@
-package com.orchestrix.security;
+package com.orchestrix.entity;
 
-import com.orchestrix.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

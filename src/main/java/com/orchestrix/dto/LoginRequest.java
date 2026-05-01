@@ -1,4 +1,4 @@
-package com.orchestrix.user.dto;
+package com.orchestrix.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

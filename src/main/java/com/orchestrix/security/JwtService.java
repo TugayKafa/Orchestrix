@@ -1,6 +1,6 @@
 package com.orchestrix.security;
 
-import com.orchestrix.user.entity.Role;
+import com.orchestrix.entity.Role;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
