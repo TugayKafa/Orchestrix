@@ -19,9 +19,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private static final String ROLE_PREFIX = "ROLE_";
 
     private final JwtService jwtService;
+    private final TokenBlacklistService tokenBlacklistService;
 
-    public JwtRequestFilter(JwtService jwtService) {
+    public JwtRequestFilter(JwtService jwtService, TokenBlacklistService tokenBlacklistService) {
         this.jwtService = jwtService;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Override
@@ -40,6 +42,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             String token = authHeader.substring(TOKEN_TYPE.length());
             String email = jwtService.extractEmail(token);
             String role = jwtService.extractRole(token);
+
+            if (tokenBlacklistService.isBlacklisted(token)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UsernamePasswordAuthenticationToken authToken =

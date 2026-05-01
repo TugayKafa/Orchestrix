@@ -33,7 +33,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    JwtRequestFilter jwtRequestFilter(JwtService jwtService) {
-        return new JwtRequestFilter(jwtService);
+    JwtRequestFilter jwtRequestFilter(JwtService jwtService, TokenBlacklistService tokenBlacklistService) {
+        return new JwtRequestFilter(jwtService, tokenBlacklistService);
     }
 }

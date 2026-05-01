@@ -7,8 +7,10 @@ import com.orchestrix.dto.RefreshRequest;
 import com.orchestrix.dto.RegisterRequest;
 import com.orchestrix.entity.User;
 import com.orchestrix.security.JwtService;
+import com.orchestrix.security.TokenBlacklistService;
 import com.orchestrix.service.RefreshTokenService;
 import com.orchestrix.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +26,17 @@ public class AuthController {
     private final UserService userService;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     public AuthController(UserService userService,
                           JwtService jwtService,
-                          RefreshTokenService refreshTokenService
+                          RefreshTokenService refreshTokenService,
+                          TokenBlacklistService tokenBlacklistService
     ) {
         this.userService = userService;
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @PostMapping("/register")
@@ -70,8 +75,16 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestBody @Valid RefreshRequest request) {
+    public ResponseEntity<Void> logout(@RequestBody @Valid RefreshRequest request,
+                                       HttpServletRequest httpRequest) {
         refreshTokenService.revokeToken(request.token());
+        String authHeader = httpRequest.getHeader("Authorization");
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String accessToken = authHeader.substring(7);
+            tokenBlacklistService.blacklist(accessToken);
+        }
+
         return ResponseEntity.noContent().build();
     }
 }
