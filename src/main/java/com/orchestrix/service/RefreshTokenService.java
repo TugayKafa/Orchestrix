@@ -51,13 +51,15 @@ public class RefreshTokenService {
         if (refreshToken.isEmpty()) {
             throw new RefreshTokenNotFoundException("Invalid refresh token.");
         }
-        if (refreshToken.get().getRevokedAt() != null) {
+
+        RefreshToken refreshTokenObj = refreshToken.get();
+        if (refreshTokenObj.getRevokedAt() != null) {
             throw new RefreshTokenRevokedException("Revoked refresh token.");
         }
-        if (refreshToken.get().getExpiresAt().isBefore(LocalDateTime.now())) {
+        if (refreshTokenObj.getExpiresAt().isBefore(LocalDateTime.now())) {
             throw new RefreshTokenExpiredException("Expired refresh token.");
         }
 
-        return refreshToken.get();
+        return refreshTokenObj;
     }
 }

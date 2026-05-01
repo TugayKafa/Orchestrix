@@ -1,6 +1,8 @@
 package com.orchestrix.security;
 
 import com.orchestrix.entity.Role;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -35,20 +37,17 @@ public class JwtService {
     }
 
     public String extractEmail(String token) {
-        return Jwts.parser()
-                .verifyWith(getKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+        return extractClaims(token).getPayload().getSubject();
     }
 
     public String extractRole(String token) {
+        return extractClaims(token).getPayload().get("role", String.class);
+    }
+
+    private Jws<Claims> extractClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getKey())
                 .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .get("role", String.class);
+                .parseSignedClaims(token);
     }
 }

@@ -8,6 +8,7 @@ import java.time.Duration;
 @Service
 public class TokenBlacklistService {
     private static final String BLACKLIST_MARKER = "blacklisted";
+    private static final Duration BLACKLIST_TTL = Duration.ofHours(1);
 
     private final StringRedisTemplate redisTemplate;
 
@@ -16,7 +17,8 @@ public class TokenBlacklistService {
     }
 
     public void blacklist(String accessToken) {
-        redisTemplate.opsForValue().set(accessToken, BLACKLIST_MARKER, Duration.ofHours(1));
+        redisTemplate.opsForValue().set(
+                accessToken, BLACKLIST_MARKER, Duration.ofHours(BLACKLIST_TTL.toHours()));
     }
 
     public boolean isBlacklisted(String accessToken) {

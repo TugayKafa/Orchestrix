@@ -31,7 +31,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     @Nonnull HttpServletResponse response,
                                     @Nonnull FilterChain filterChain)
             throws ServletException, IOException {
-
         String authHeader = request.getHeader(AUTHORIZATION_HEADER);
         if (authHeader == null || !authHeader.startsWith(TOKEN_TYPE)) {
             filterChain.doFilter(request, response);
@@ -55,11 +54,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                 AuthorityUtils.createAuthorityList(ROLE_PREFIX + role));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
-        } catch (JwtException e) {
+        } catch (JwtException exc) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-
         filterChain.doFilter(request, response);
     }
 }

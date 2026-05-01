@@ -12,6 +12,7 @@ import com.orchestrix.service.RefreshTokenService;
 import com.orchestrix.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String TOKEN_TYPE = "Bearer ";
 
     private final UserService userService;
     private final JwtService jwtService;
@@ -78,10 +81,10 @@ public class AuthController {
     public ResponseEntity<Void> logout(@RequestBody @Valid RefreshRequest request,
                                        HttpServletRequest httpRequest) {
         refreshTokenService.revokeToken(request.token());
-        String authHeader = httpRequest.getHeader("Authorization");
+        String authHeader = httpRequest.getHeader(AUTHORIZATION_HEADER);
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String accessToken = authHeader.substring(7);
+        if (authHeader != null && authHeader.startsWith(TOKEN_TYPE)) {
+            String accessToken = authHeader.substring(TOKEN_TYPE.length());
             tokenBlacklistService.blacklist(accessToken);
         }
 
