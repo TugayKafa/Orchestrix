@@ -48,4 +48,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleJwtException(JwtException exc) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exc.getMessage());
     }
+
+    @ExceptionHandler(RefreshTokenNotFoundException.class)
+    public ResponseEntity<String> handleRefreshTokenNotFoundException(RefreshTokenNotFoundException exc) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exc.getMessage());
+    }
+
+    @ExceptionHandler(RefreshTokenRevokedException.class)
+    public ResponseEntity<String> handleRefreshTokenRevokedException(RefreshTokenRevokedException exc) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exc.getMessage());
+    }
+
+    @ExceptionHandler(RefreshTokenExpiredException.class)
+    public ResponseEntity<String> handleRefreshTokenExpiredException(RefreshTokenExpiredException exc) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exc.getMessage());
+    }
 }
