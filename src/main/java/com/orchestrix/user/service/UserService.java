@@ -22,12 +22,14 @@ public class UserService {
         this.encoder = encoder;
     }
 
-    public void register(String email, String password, String name) {
+    public User register(String email, String password, String name) {
         if (users.findByEmail(email).isPresent()) {
             throw new UserAlreadyExistsException("Email: " + email + " is already in use.");
         }
 
-        users.save(new User(email, encoder.encode(password), name, Role.USER));
+        User user = new User(email, encoder.encode(password), name, Role.USER);
+        users.save(user);
+        return user;
     }
 
     public User login(String email, String password) {
