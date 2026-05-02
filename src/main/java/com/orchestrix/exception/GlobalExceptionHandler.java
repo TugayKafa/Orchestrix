@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<String> handlerUserAlreadyExists(UserAlreadyExistsException exc) {
+    public ResponseEntity<String> handleUserAlreadyExists(UserAlreadyExistsException exc) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(exc.getMessage());
     }
 

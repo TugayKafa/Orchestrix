@@ -41,7 +41,7 @@ public class RefreshTokenServiceTest {
     private RefreshTokenService refreshTokenService;
 
     @Test
-    void testGenerateAccessTokenReturnsValidRefreshToken() {
+    void testGenerateRefreshTokenReturnsValidRefreshToken() {
         User user = new User(
                 "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER);
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(user);

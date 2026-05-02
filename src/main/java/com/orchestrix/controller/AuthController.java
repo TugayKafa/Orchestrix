@@ -12,7 +12,6 @@ import com.orchestrix.service.RefreshTokenService;
 import com.orchestrix.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,29 +44,19 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterRequest request) {
         User user = userService.register(request.email(), request.password(), request.firstName(), request.lastName());
-        String refreshToken = refreshTokenService.generateRefreshToken(user).getToken();
-        String accessToken = jwtService.generateToken(user.getEmail(), user.getRole());
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new AuthResponse(
-                        request.email(),
-                        refreshToken,
-                        accessToken
-                        )
-                );
+        return ResponseEntity.status(HttpStatus.CREATED).body(buildAuthResponse(user));
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
         User user = userService.login(request.email(), request.password());
+        return ResponseEntity.ok().body(buildAuthResponse(user));
+    }
+
+    private AuthResponse buildAuthResponse(User user) {
         String refreshToken = refreshTokenService.generateRefreshToken(user).getToken();
         String accessToken = jwtService.generateToken(user.getEmail(), user.getRole());
-        return ResponseEntity.ok()
-                .body(new AuthResponse(
-                        request.email(),
-                        refreshToken,
-                        accessToken
-                        )
-                );
+        return new AuthResponse(user.getEmail(), refreshToken, accessToken);
     }
 
     @PostMapping("/refresh")

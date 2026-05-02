@@ -43,8 +43,9 @@ public class RefreshToken {
     public RefreshToken(User user, String token) {
         this.user = user;
         this.token = token;
-        this.createdAt = LocalDateTime.now();
-        this.expiresAt = LocalDateTime.now().plusWeeks(EXPIRATION_WEEKS);
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.expiresAt = now.plusWeeks(EXPIRATION_WEEKS);
     }
 
     public User getUser() {

@@ -14,12 +14,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http, JwtRequestFilter jwtRequestFilter) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtRequestFilter jwtRequestFilter) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(
@@ -35,7 +35,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    JwtRequestFilter jwtRequestFilter(JwtService jwtService, TokenBlacklistService tokenBlacklistService) {
+    public JwtRequestFilter jwtRequestFilter(JwtService jwtService, TokenBlacklistService tokenBlacklistService) {
         return new JwtRequestFilter(jwtService, tokenBlacklistService);
     }
 }

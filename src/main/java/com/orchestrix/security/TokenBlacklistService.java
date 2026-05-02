@@ -18,7 +18,7 @@ public class TokenBlacklistService {
 
     public void blacklist(String accessToken) {
         redisTemplate.opsForValue().set(
-                accessToken, BLACKLIST_MARKER, Duration.ofHours(BLACKLIST_TTL.toHours()));
+                accessToken, BLACKLIST_MARKER, BLACKLIST_TTL);
     }
 
     public boolean isBlacklisted(String accessToken) {
