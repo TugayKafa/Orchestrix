@@ -14,14 +14,20 @@ public record RegisterRequest(
         @NotBlank
         @Size(min = 8, max = 32,
                 message = "Password must be between 8-32 characters long")
-        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).+$",
-                message = "Password must contain uppercase, lowercase, digit and special character")
+        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$",
+                message = "Password must contain uppercase, lowercase and digit")
         String password,
 
         @NotBlank
-        @Size(min = 4,
-                message = "Name must be at least 4 letters long")
-        @Pattern(regexp = "^[a-zA-Z]+$", message = "Name must contain only letters")
-        String name
+        @Size(min = 2,
+                message = "First name must be at least 2 letters long")
+        @Pattern(regexp = "^[a-zA-Z]+$", message = "First name must contain only letters")
+        String firstName,
+
+        @NotBlank
+        @Size(min = 2,
+                message = "Last name must be at least 2 letters long")
+        @Pattern(regexp = "^[a-zA-Z]+$", message = "Last name must contain only letters")
+        String lastName
 ) {
 }

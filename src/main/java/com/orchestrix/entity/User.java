@@ -32,8 +32,12 @@ public class User {
     private String passwordHash;
 
     @NotBlank
-    @Column(name = "name")
-    private String name;
+    @Column(name = "first_name")
+    private String firstName;
+
+    @NotBlank
+    @Column(name = "last_name")
+    private String lastName;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
@@ -48,10 +52,11 @@ public class User {
     protected User() {
     }
 
-    public User(String email, String passwordHash, String name, Role role) {
+    public User(String email, String passwordHash, String firstName, String lastName, Role role) {
         this.email = email;
         this.passwordHash = passwordHash;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.role = role;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
@@ -74,12 +79,21 @@ public class User {
         return passwordHash;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
         this.updatedAt = LocalDateTime.now();
     }
 
