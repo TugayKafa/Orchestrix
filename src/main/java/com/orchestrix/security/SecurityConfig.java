@@ -19,14 +19,17 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtRequestFilter jwtRequestFilter) throws Exception {
+    public SecurityFilterChain filterChain(
+            HttpSecurity http, JwtRequestFilter jwtRequestFilter, OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler)
+            throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth -> oauth.successHandler(oAuth2LoginSuccessHandler))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/login/oauth2/code/*").permitAll()
                         .requestMatchers("/", "/index.html", "/login.html", "/register.html",
                                 "/styles.css", "/app.js", "/assets/**").permitAll()
                         .anyRequest().authenticated()

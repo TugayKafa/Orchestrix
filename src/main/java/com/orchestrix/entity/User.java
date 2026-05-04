@@ -27,21 +27,22 @@ public class User {
     @Column(name = "email", unique = true)
     private String email;
 
-    @NotBlank
     @Column(name = "password_hash")
     private String passwordHash;
 
-    @NotBlank
     @Column(name = "first_name")
     private String firstName;
 
-    @NotBlank
     @Column(name = "last_name")
     private String lastName;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auth_provider")
+    private AuthProvider authProvider;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -52,12 +53,16 @@ public class User {
     protected User() {
     }
 
-    public User(String email, String passwordHash, String firstName, String lastName, Role role) {
+    public User(
+            String email, String passwordHash, String firstName, String lastName,
+            Role role, AuthProvider authProvider) {
         this.email = email;
         this.passwordHash = passwordHash;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
+        this.authProvider = authProvider;
+
         LocalDateTime now = LocalDateTime.now();
         this.createdAt = now;
         this.updatedAt = now;
@@ -100,6 +105,10 @@ public class User {
 
     public Role getRole() {
         return role;
+    }
+
+    public AuthProvider getAuthProvider() {
+        return authProvider;
     }
 
     public void setRole(Role role) {

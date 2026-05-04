@@ -1,5 +1,6 @@
 package com.orchestrix.service;
 
+import com.orchestrix.entity.AuthProvider;
 import com.orchestrix.entity.Role;
 import com.orchestrix.entity.User;
 import com.orchestrix.exception.InvalidPasswordException;
@@ -27,7 +28,7 @@ public class UserService {
             throw new UserAlreadyExistsException("Email: " + email + " is already in use.");
         }
 
-        User user = new User(email, encoder.encode(password), firstName, lastName, Role.USER);
+        User user = new User(email, encoder.encode(password), firstName, lastName, Role.USER, AuthProvider.LOCAL);
         users.save(user);
         return user;
     }
@@ -44,5 +45,14 @@ public class UserService {
         }
 
         return user.get();
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return users.findByEmail(email);
+    }
+
+    public User createOAuthUser(String email, String firstName, String lastName, AuthProvider provider) {
+        User user = new User(email, null, firstName, lastName, Role.USER, provider);
+        return users.save(user);
     }
 }
