@@ -26,8 +26,12 @@ public class TokenBlacklistServiceTest {
     @Mock
     ValueOperations<String, String> valueOperations;
 
-    @InjectMocks
     private TokenBlacklistService tokenBlacklistService;
+
+    @org.junit.jupiter.api.BeforeEach
+    void setUp() {
+        tokenBlacklistService = new TokenBlacklistService(redisTemplate, 1);
+    }
 
     @Test
     void testBlacklistStoresTokenInRedis() {

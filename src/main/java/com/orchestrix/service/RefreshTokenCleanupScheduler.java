@@ -15,8 +15,8 @@ public class RefreshTokenCleanupScheduler {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    @Scheduled(cron = "0 0 3 * * *")
-    public void cleanUp() {
+    @Scheduled(cron = "${cleanup.cron}")
+    public void cleanupExpiredTokens() {
         refreshTokenRepository.deleteExpiredOrRevoked(LocalDateTime.now());
     }
 }

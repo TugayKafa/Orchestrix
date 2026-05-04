@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "refresh_tokens")
 public class RefreshToken {
-    private static final int EXPIRATION_WEEKS = 1;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -40,12 +38,12 @@ public class RefreshToken {
     protected RefreshToken() {
     }
 
-    public RefreshToken(User user, String token) {
+    public RefreshToken(User user, String token, int expirationWeeks) {
         this.user = user;
         this.token = token;
         LocalDateTime now = LocalDateTime.now();
         this.createdAt = now;
-        this.expiresAt = now.plusWeeks(EXPIRATION_WEEKS);
+        this.expiresAt = now.plusWeeks(expirationWeeks);
     }
 
     public User getUser() {

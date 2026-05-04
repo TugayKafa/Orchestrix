@@ -28,6 +28,10 @@ class JwtServiceTest {
         secretField.setAccessible(true);
         secretField.set(jwtService, "dGVzdHNlY3JldGtleXRoYXRpc2xvbmdlbm91Z2hmb3JocyEhIQ==");
 
+        Field expirationField = JwtService.class.getDeclaredField("expirationMs");
+        expirationField.setAccessible(true);
+        expirationField.set(jwtService, 3600000L);
+
         java.lang.reflect.Method initMethod = JwtService.class.getDeclaredMethod("init");
         initMethod.setAccessible(true);
         initMethod.invoke(jwtService);
@@ -62,9 +66,9 @@ class JwtServiceTest {
         String token = jwtService.generateToken("ivan@gmail.com", Role.USER);
 
         assertEquals(
-                "USER",
+                Role.USER,
                 jwtService.extractRole(token),
-                "Expected extracted role to match 'USER'"
+                "Expected extracted role to match Role.USER"
         );
     }
 

@@ -23,7 +23,7 @@ class RefreshTokenCleanupSchedulerTest {
 
     @Test
     void testCleanUpDeletesExpiredOrRevokedTokens() {
-        scheduler.cleanUp();
+        scheduler.cleanupExpiredTokens();
         verify(refreshTokenRepository).deleteExpiredOrRevoked(any(LocalDateTime.class));
     }
 }

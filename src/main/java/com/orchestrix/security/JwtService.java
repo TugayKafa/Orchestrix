@@ -15,12 +15,11 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-    private static final int MILLIS_IN_SECS = 1000;
-    private static final int SECS_IN_MIN = 60;
-    private static final int MINS_IN_HOUR = 60;
-
     @Value("${jwt.secret}")
     private String secret;
+
+    @Value("${jwt.expiration-ms}")
+    private long expirationMs;
 
     private SecretKey key;
 
@@ -34,8 +33,7 @@ public class JwtService {
                 .subject(email)
                 .claim("role", role.name())
                 .issuedAt(new Date())
-                .expiration(new Date(
-                        System.currentTimeMillis() + MILLIS_IN_SECS * SECS_IN_MIN * MINS_IN_HOUR))
+                .expiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(key)
                 .compact();
     }
@@ -44,8 +42,9 @@ public class JwtService {
         return extractClaims(token).getPayload().getSubject();
     }
 
-    public String extractRole(String token) {
-        return extractClaims(token).getPayload().get("role", String.class);
+    public Role extractRole(String token) {
+        String role = extractClaims(token).getPayload().get("role", String.class);
+        return Role.valueOf(role);
     }
 
     private Jws<Claims> extractClaims(String token) {

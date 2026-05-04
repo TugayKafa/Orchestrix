@@ -41,6 +41,13 @@ public class RefreshTokenServiceTest {
     @InjectMocks
     private RefreshTokenService refreshTokenService;
 
+    @org.junit.jupiter.api.BeforeEach
+    void setUp() throws Exception {
+        Field expirationField = RefreshTokenService.class.getDeclaredField("expirationWeeks");
+        expirationField.setAccessible(true);
+        expirationField.set(refreshTokenService, 1);
+    }
+
     @Test
     void testGenerateRefreshTokenReturnsValidRefreshToken() {
         User user = new User(
@@ -76,7 +83,7 @@ public class RefreshTokenServiceTest {
         User user = new User(
                 "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER, AuthProvider.LOCAL);
         when(refreshTokenRepository.findByToken("token"))
-                .thenReturn(Optional.of(new RefreshToken(user, "token")));
+                .thenReturn(Optional.of(new RefreshToken(user, "token", 1)));
         when(jwtService.generateToken("ivan@gmail.com", Role.USER))
                 .thenReturn("mocked-access-token");
 
@@ -107,7 +114,7 @@ public class RefreshTokenServiceTest {
     void testGenerateAccessTokenWithRevokedRefreshTokenThrowsException() {
         User user = new User(
                 "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER, AuthProvider.LOCAL);
-        RefreshToken refreshToken = new RefreshToken(user, "token");
+        RefreshToken refreshToken = new RefreshToken(user, "token", 1);
         refreshToken.revokeToken();
 
         when(refreshTokenRepository.findByToken("token"))
@@ -125,7 +132,7 @@ public class RefreshTokenServiceTest {
     void testGenerateAccessTokenWithExpiredRefreshTokenThrowsException() throws Exception {
         User user = new User(
                 "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER, AuthProvider.LOCAL);
-        RefreshToken refreshToken = new RefreshToken(user, "token");
+        RefreshToken refreshToken = new RefreshToken(user, "token", 1);
 
         Field expiresAtField = RefreshToken.class.getDeclaredField("expiresAt");
         expiresAtField.setAccessible(true);
@@ -146,7 +153,7 @@ public class RefreshTokenServiceTest {
     void testRevokeTokenSuccessfully() {
         User user = new User(
                 "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER, AuthProvider.LOCAL);
-        RefreshToken refreshToken = new RefreshToken(user, "token");
+        RefreshToken refreshToken = new RefreshToken(user, "token", 1);
 
         when(refreshTokenRepository.findByToken("token"))
                 .thenReturn(Optional.of(refreshToken));

@@ -1,5 +1,6 @@
 package com.orchestrix.security;
 
+import com.orchestrix.entity.Role;
 import io.jsonwebtoken.JwtException;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
@@ -40,7 +41,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         try {
             String token = authHeader.substring(TOKEN_TYPE.length());
             String email = jwtService.extractEmail(token);
-            String role = jwtService.extractRole(token);
+            Role role = jwtService.extractRole(token);
 
             if (tokenBlacklistService.isBlacklisted(token)) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -51,7 +52,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 email, null,
-                                AuthorityUtils.createAuthorityList(ROLE_PREFIX + role));
+                                AuthorityUtils.createAuthorityList(ROLE_PREFIX + role.name()));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         } catch (JwtException exc) {

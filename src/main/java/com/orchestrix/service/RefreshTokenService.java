@@ -7,6 +7,7 @@ import com.orchestrix.exception.RefreshTokenNotFoundException;
 import com.orchestrix.exception.RefreshTokenRevokedException;
 import com.orchestrix.repository.RefreshTokenRepository;
 import com.orchestrix.security.JwtService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,13 +20,16 @@ public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtService jwtService;
 
+    @Value("${refresh-token.expiration-weeks}")
+    private int expirationWeeks;
+
     public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, JwtService jwtService) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.jwtService = jwtService;
     }
 
     public RefreshToken generateRefreshToken(User user) {
-        RefreshToken refreshToken = new RefreshToken(user, UUID.randomUUID().toString());
+        RefreshToken refreshToken = new RefreshToken(user, UUID.randomUUID().toString(), expirationWeeks);
         refreshTokenRepository.save(refreshToken);
         return refreshToken;
     }

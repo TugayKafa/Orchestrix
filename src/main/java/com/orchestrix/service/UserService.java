@@ -34,17 +34,14 @@ public class UserService {
     }
 
     public User login(String email, String password) {
-        Optional<User> user = users.findByEmail(email);
+        User user = users.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Invalid credentials."));
 
-        if (user.isEmpty()) {
-            throw new UserNotFoundException("Invalid credentials.");
-        }
-
-        if (!encoder.matches(password, user.get().getPasswordHash())) {
+        if (!encoder.matches(password, user.getPasswordHash())) {
             throw new InvalidPasswordException("Invalid credentials.");
         }
 
-        return user.get();
+        return user;
     }
 
     public Optional<User> findByEmail(String email) {
