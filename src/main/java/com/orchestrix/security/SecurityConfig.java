@@ -1,5 +1,6 @@
 package com.orchestrix.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,8 +29,12 @@ public class SecurityConfig {
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(oauth -> oauth.successHandler(oAuth2LoginSuccessHandler))
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) ->
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED)))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/login/oauth2/code/*").permitAll()
+                        .requestMatchers("/api/auth/**", "/login/oauth2/code/*",
+                                "/oauth2/authorization/*").permitAll()
                         .requestMatchers("/", "/index.html", "/login.html", "/register.html",
                                 "/styles.css", "/app.js", "/assets/**").permitAll()
                         .anyRequest().authenticated()
