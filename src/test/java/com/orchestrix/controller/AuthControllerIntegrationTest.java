@@ -123,7 +123,7 @@ public class AuthControllerIntegrationTest {
                         "token": "%s"
                     }
                 """, refreshToken)))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").exists());
     }
 

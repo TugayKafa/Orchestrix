@@ -7,6 +7,7 @@ import com.orchestrix.dto.RefreshRequest;
 import com.orchestrix.dto.RegisterRequest;
 import com.orchestrix.entity.User;
 import com.orchestrix.security.JwtService;
+import com.orchestrix.security.SecurityConstants;
 import com.orchestrix.security.TokenBlacklistService;
 import com.orchestrix.service.RefreshTokenService;
 import com.orchestrix.service.UserService;
@@ -25,8 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String TOKEN_TYPE = "Bearer ";
 
     private final UserService userService;
     private final JwtService jwtService;
@@ -68,18 +67,17 @@ public class AuthController {
     public ResponseEntity<AccessTokenResponse> refreshToken(@RequestBody @Valid RefreshRequest request) {
         String accessToken = refreshTokenService.generateAccessToken(request.token());
         logger.info("Access token refreshed");
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new AccessTokenResponse(accessToken));
+        return ResponseEntity.ok(new AccessTokenResponse(accessToken));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestBody @Valid RefreshRequest request,
                                        HttpServletRequest httpRequest) {
         refreshTokenService.revokeToken(request.token());
-        String authHeader = httpRequest.getHeader(AUTHORIZATION_HEADER);
+        String authHeader = httpRequest.getHeader(SecurityConstants.AUTHORIZATION_HEADER);
 
-        if (authHeader != null && authHeader.startsWith(TOKEN_TYPE)) {
-            String accessToken = authHeader.substring(TOKEN_TYPE.length());
+        if (authHeader != null && authHeader.startsWith(SecurityConstants.TOKEN_TYPE)) {
+            String accessToken = authHeader.substring(SecurityConstants.TOKEN_TYPE.length());
             tokenBlacklistService.blacklist(accessToken);
         }
 

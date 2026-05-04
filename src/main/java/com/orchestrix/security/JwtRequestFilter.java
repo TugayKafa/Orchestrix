@@ -18,9 +18,6 @@ import java.io.IOException;
 
 public class JwtRequestFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String TOKEN_TYPE = "Bearer ";
-    private static final String ROLE_PREFIX = "ROLE_";
 
     private final JwtService jwtService;
     private final TokenBlacklistService tokenBlacklistService;
@@ -35,14 +32,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     @Nonnull HttpServletResponse response,
                                     @Nonnull FilterChain filterChain)
             throws ServletException, IOException {
-        String authHeader = request.getHeader(AUTHORIZATION_HEADER);
-        if (authHeader == null || !authHeader.startsWith(TOKEN_TYPE)) {
+        String authHeader = request.getHeader(SecurityConstants.AUTHORIZATION_HEADER);
+        if (authHeader == null || !authHeader.startsWith(SecurityConstants.TOKEN_TYPE)) {
             filterChain.doFilter(request, response);
             return;
         }
 
         try {
-            String token = authHeader.substring(TOKEN_TYPE.length());
+            String token = authHeader.substring(SecurityConstants.TOKEN_TYPE.length());
             String email = jwtService.extractEmail(token);
             Role role = jwtService.extractRole(token);
 
@@ -56,7 +53,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 email, null,
-                                AuthorityUtils.createAuthorityList(ROLE_PREFIX + role.name()));
+                                AuthorityUtils.createAuthorityList(SecurityConstants.ROLE_PREFIX + role.name()));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         } catch (JwtException exc) {
