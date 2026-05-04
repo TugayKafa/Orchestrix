@@ -7,6 +7,8 @@ import com.orchestrix.service.RefreshTokenService;
 import com.orchestrix.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -17,6 +19,7 @@ import java.io.IOException;
 
 @Component
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+    private static final Logger logger = LoggerFactory.getLogger(OAuth2LoginSuccessHandler.class);
     private static final String ATTR_EMAIL = "email";
     private static final String ATTR_GIVEN_NAME = "given_name";
     private static final String ATTR_FAMILY_NAME = "family_name";
@@ -51,12 +54,13 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         }
 
         User user = userService.findByEmail(userInfo.email())
-                .orElseGet(() -> userService.createOAuthUser(
-                        userInfo.email(),
-                        userInfo.firstName(),
-                        userInfo.lastName(),
-                        provider)
-                );
+                .orElseGet(() -> {
+                    logger.info("New OAuth2 user registered via {}: {}", provider, userInfo.email());
+                    return userService.createOAuthUser(
+                            userInfo.email(), userInfo.firstName(), userInfo.lastName(), provider);
+                });
+
+        logger.info("OAuth2 login via {}: {}", provider, user.getEmail());
 
         String accessToken = jwtService.generateToken(user.getEmail(), user.getRole());
         String refreshToken = refreshTokenService.generateRefreshToken(user).getToken();

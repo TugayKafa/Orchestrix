@@ -12,6 +12,8 @@ import com.orchestrix.service.RefreshTokenService;
 import com.orchestrix.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String TOKEN_TYPE = "Bearer ";
 
@@ -44,12 +47,14 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterRequest request) {
         User user = userService.register(request.email(), request.password(), request.firstName(), request.lastName());
+        logger.info("User registered: {}", user.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).body(buildAuthResponse(user));
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
         User user = userService.login(request.email(), request.password());
+        logger.info("User logged in: {}", user.getEmail());
         return ResponseEntity.ok().body(buildAuthResponse(user));
     }
 
@@ -62,6 +67,7 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<AccessTokenResponse> refreshToken(@RequestBody @Valid RefreshRequest request) {
         String accessToken = refreshTokenService.generateAccessToken(request.token());
+        logger.info("Access token refreshed");
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new AccessTokenResponse(accessToken));
     }
@@ -77,6 +83,7 @@ public class AuthController {
             tokenBlacklistService.blacklist(accessToken);
         }
 
+        logger.info("User logged out");
         return ResponseEntity.noContent().build();
     }
 }
