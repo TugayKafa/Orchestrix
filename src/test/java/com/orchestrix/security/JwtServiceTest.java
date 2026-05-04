@@ -27,6 +27,10 @@ class JwtServiceTest {
         Field secretField = JwtService.class.getDeclaredField("secret");
         secretField.setAccessible(true);
         secretField.set(jwtService, "dGVzdHNlY3JldGtleXRoYXRpc2xvbmdlbm91Z2hmb3JocyEhIQ==");
+
+        java.lang.reflect.Method initMethod = JwtService.class.getDeclaredMethod("init");
+        initMethod.setAccessible(true);
+        initMethod.invoke(jwtService);
     }
 
     @Test

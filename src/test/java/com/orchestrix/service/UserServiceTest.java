@@ -16,7 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.never;
@@ -156,5 +158,74 @@ public class UserServiceTest {
                 () -> userService.login("ivan@gmail.com", "Password123"),
                 "Expected InvalidPasswordException to be thrown."
         );
+    }
+
+    @Test
+    void testFindByEmailReturnsUser() {
+        User existing = new User(
+                "ivan@gmail.com", "hash", "Ivan", "Ivanov",
+                Role.USER, AuthProvider.LOCAL);
+        when(userRepository.findByEmail("ivan@gmail.com"))
+                .thenReturn(Optional.of(existing));
+
+        Optional<User> result = userService.findByEmail("ivan@gmail.com");
+
+        assertTrue(
+                result.isPresent(),
+                "Expected user to be found by email 'ivan@gmail.com'."
+        );
+        assertEquals(
+                "ivan@gmail.com",
+                result.get().getEmail(),
+                "Expected user's email to be 'ivan@gmail.com'."
+        );
+    }
+
+    @Test
+    void testFindByEmailReturnsEmptyWhenNotFound() {
+        when(userRepository.findByEmail("unknown@gmail.com"))
+                .thenReturn(Optional.empty());
+
+        Optional<User> result = userService.findByEmail("unknown@gmail.com");
+
+        assertTrue(
+                result.isEmpty(),
+                "Expected empty result for nonexistent email 'unknown@gmail.com'."
+        );
+    }
+
+    @Test
+    void testCreateOAuthUserWithNullPassword() {
+        when(userRepository.save(any(User.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        User user = userService.createOAuthUser(
+                "ivan@gmail.com", "Ivan", "Ivanov", AuthProvider.GOOGLE);
+
+        assertEquals(
+                "ivan@gmail.com",
+                user.getEmail(),
+                "Expected OAuth user's email to be 'ivan@gmail.com'."
+        );
+        assertEquals(
+                "Ivan",
+                user.getFirstName(),
+                "Expected OAuth user's first name to be 'Ivan'."
+        );
+        assertEquals(
+                "Ivanov",
+                user.getLastName(),
+                "Expected OAuth user's last name to be 'Ivanov'."
+        );
+        assertEquals(
+                AuthProvider.GOOGLE,
+                user.getAuthProvider(),
+                "Expected OAuth user's auth provider to be GOOGLE."
+        );
+        assertNull(
+                user.getPasswordHash(),
+                "Expected OAuth user's password to be null."
+        );
+        verify(userRepository).save(any(User.class));
     }
 }

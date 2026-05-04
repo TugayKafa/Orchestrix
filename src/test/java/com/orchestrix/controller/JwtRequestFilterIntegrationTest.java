@@ -59,7 +59,7 @@ public class JwtRequestFilterIntegrationTest {
     @Test
     void testRequestWithNullJwtTokenIsDeclined() throws Exception {
         mockMvc.perform(get("/api/test"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
 }
