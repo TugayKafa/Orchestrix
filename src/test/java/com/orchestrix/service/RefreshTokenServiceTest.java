@@ -1,5 +1,6 @@
 package com.orchestrix.service;
 
+import com.orchestrix.entity.AuthProvider;
 import com.orchestrix.entity.RefreshToken;
 import com.orchestrix.entity.Role;
 import com.orchestrix.entity.User;
@@ -43,7 +44,7 @@ public class RefreshTokenServiceTest {
     @Test
     void testGenerateRefreshTokenReturnsValidRefreshToken() {
         User user = new User(
-                "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER);
+                "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER, AuthProvider.LOCAL);
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(user);
 
         assertEquals(
@@ -73,7 +74,7 @@ public class RefreshTokenServiceTest {
     @Test
     void testGenerateAccessTokenReturnsValidAccessToken() {
         User user = new User(
-                "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER);
+                "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER, AuthProvider.LOCAL);
         when(refreshTokenRepository.findByToken("token"))
                 .thenReturn(Optional.of(new RefreshToken(user, "token")));
         when(jwtService.generateToken("ivan@gmail.com", Role.USER))
@@ -105,7 +106,7 @@ public class RefreshTokenServiceTest {
     @Test
     void testGenerateAccessTokenWithRevokedRefreshTokenThrowsException() {
         User user = new User(
-                "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER);
+                "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER, AuthProvider.LOCAL);
         RefreshToken refreshToken = new RefreshToken(user, "token");
         refreshToken.revokeToken();
 
@@ -123,7 +124,7 @@ public class RefreshTokenServiceTest {
     @Test
     void testGenerateAccessTokenWithExpiredRefreshTokenThrowsException() throws Exception {
         User user = new User(
-                "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER);
+                "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER, AuthProvider.LOCAL);
         RefreshToken refreshToken = new RefreshToken(user, "token");
 
         Field expiresAtField = RefreshToken.class.getDeclaredField("expiresAt");
@@ -144,7 +145,7 @@ public class RefreshTokenServiceTest {
     @Test
     void testRevokeTokenSuccessfully() {
         User user = new User(
-                "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER);
+                "ivan@gmail.com", "hash", "Ivan", "Ivanov", Role.USER, AuthProvider.LOCAL);
         RefreshToken refreshToken = new RefreshToken(user, "token");
 
         when(refreshTokenRepository.findByToken("token"))

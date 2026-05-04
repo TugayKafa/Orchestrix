@@ -1,5 +1,6 @@
 package com.orchestrix.service;
 
+import com.orchestrix.entity.AuthProvider;
 import com.orchestrix.entity.Role;
 import com.orchestrix.entity.User;
 import com.orchestrix.exception.InvalidPasswordException;
@@ -79,7 +80,7 @@ public class UserServiceTest {
                         "hash",
                         "Ivan",
                         "Ivanov",
-                        Role.USER))
+                        Role.USER, AuthProvider.LOCAL))
                 );
 
         assertThrows(UserAlreadyExistsException.class,
@@ -101,7 +102,7 @@ public class UserServiceTest {
                         "hashed_password",
                         "Ivan",
                          "Ivanov",
-                         Role.USER))
+                         Role.USER, AuthProvider.LOCAL))
                 );
         when(passwordEncoder.matches("Password123", "hashed_password"))
                 .thenReturn(true);
@@ -144,7 +145,7 @@ public class UserServiceTest {
                         "hashed_password",
                         "Ivan",
                         "Ivanov",
-                        Role.USER))
+                        Role.USER, AuthProvider.LOCAL))
                 );
 
         when(passwordEncoder.matches("Password123", "hashed_password"))
