@@ -9,13 +9,22 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.RequestEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -25,16 +34,22 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private static final String ATTR_FAMILY_NAME = "family_name";
     private static final String ATTR_NAME = "name";
     private static final String GITHUB_NAME_SEPARATOR = " ";
+    private static final String GITHUB_EMAILS_API = "https://api.github.com/user/emails";
 
     private final UserService userService;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
+    private final OAuth2AuthorizedClientService authorizedClientService;
+    private final RestTemplate restTemplate;
 
     public OAuth2LoginSuccessHandler(
-            UserService userService, JwtService jwtService, RefreshTokenService refreshTokenService) {
+            UserService userService, JwtService jwtService, RefreshTokenService refreshTokenService,
+            OAuth2AuthorizedClientService authorizedClientService) {
         this.userService = userService;
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
+        this.authorizedClientService = authorizedClientService;
+        this.restTemplate = new RestTemplate();
     }
 
     @Override
@@ -50,7 +65,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         if (provider == AuthProvider.GOOGLE) {
             userInfo = extractDataFromGoogleResponse(oAuth2User);
         } else {
-            userInfo = extractDataFromGithubResponse(oAuth2User);
+            userInfo = extractDataFromGithubResponse(oAuth2User, (OAuth2AuthenticationToken) authentication);
         }
 
         User user = userService.findByEmail(userInfo.email())
@@ -81,8 +96,14 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         return new OAuthUserInfo(email, firstName, lastName);
     }
 
-    private OAuthUserInfo extractDataFromGithubResponse(OAuth2User oAuth2User) {
+    private OAuthUserInfo extractDataFromGithubResponse(OAuth2User oAuth2User,
+                                                          OAuth2AuthenticationToken authToken) {
         String email = oAuth2User.getAttribute(ATTR_EMAIL);
+
+        if (email == null) {
+            email = fetchGithubEmail(authToken);
+        }
+
         String fullName = oAuth2User.getAttribute(ATTR_NAME);
         String firstName = "";
         String lastName = "";
@@ -95,5 +116,30 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         }
 
         return new OAuthUserInfo(email, firstName, lastName);
+    }
+
+    private String fetchGithubEmail(OAuth2AuthenticationToken authToken) {
+        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
+                authToken.getAuthorizedClientRegistrationId(), authToken.getName());
+
+        String accessToken = client.getAccessToken().getTokenValue();
+
+        RequestEntity<Void> request = RequestEntity.get(URI.create(GITHUB_EMAILS_API))
+                .header(HttpHeaders.AUTHORIZATION, SecurityConstants.TOKEN_TYPE + accessToken)
+                .build();
+
+        List<Map<String, Object>> emails = restTemplate.exchange(
+                request, new ParameterizedTypeReference<List<Map<String, Object>>>() {}).getBody();
+
+        if (emails != null) {
+            for (Map<String, Object> entry : emails) {
+                if (Boolean.TRUE.equals(entry.get("primary"))) {
+                    return (String) entry.get(ATTR_EMAIL);
+                }
+            }
+        }
+
+        logger.warn("Could not fetch primary email from GitHub");
+        return null;
     }
 }
