@@ -1,5 +1,6 @@
-package com.orchestrix.entity;
+package com.orchestrix.entity.auth;
 
+import com.orchestrix.entity.Job;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -7,11 +8,15 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "orchestrix_users")
@@ -49,6 +54,9 @@ public class User {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "user")
+    private List<Job> jobs = new ArrayList<>();
 
     protected User() {
     }
@@ -122,5 +130,37 @@ public class User {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public List<Job> getJobs() {
+        return Collections.unmodifiableList(jobs);
+    }
+
+    public void addJob(Job job) {
+        if (job == null || jobs.contains(job)) {
+            return;
+        }
+
+        addJobInternal(job);
+        job.setUser(this);
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void removeJob(Job job) {
+        if (job == null || !jobs.contains(job)) {
+            return;
+        }
+
+        removeJobInternal(job);
+        job.setUser(null);
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void addJobInternal(Job job) {
+        jobs.add(job);
+    }
+
+    public void removeJobInternal(Job job) {
+        jobs.remove(job);
     }
 }

@@ -1,4 +1,4 @@
-package com.orchestrix.entity;
+package com.orchestrix.entity.auth;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

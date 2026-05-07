@@ -1,12 +1,13 @@
 package com.orchestrix.service;
 
-import com.orchestrix.entity.AuthProvider;
-import com.orchestrix.entity.Role;
-import com.orchestrix.entity.User;
+import com.orchestrix.entity.auth.AuthProvider;
+import com.orchestrix.entity.auth.Role;
+import com.orchestrix.entity.auth.User;
 import com.orchestrix.exception.InvalidPasswordException;
 import com.orchestrix.exception.UserAlreadyExistsException;
 import com.orchestrix.exception.UserNotFoundException;
-import com.orchestrix.repository.UserRepository;
+import com.orchestrix.repository.userRepository.UserRepository;
+import com.orchestrix.service.userService.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,7 +36,7 @@ public class UserServiceTest {
     PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    UserService userService;
+    UserServiceImpl userService;
 
     @Test
     void testValidRegistration() {

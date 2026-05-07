@@ -1,4 +1,4 @@
-package com.orchestrix.service;
+package com.orchestrix.service.auth;
 
 import com.orchestrix.repository.RefreshTokenRepository;
 import org.slf4j.Logger;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Service
 public class RefreshTokenCleanupScheduler {
 
-    private static final Logger logger = LoggerFactory.getLogger(RefreshTokenCleanupScheduler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RefreshTokenCleanupScheduler.class);
 
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -22,6 +22,6 @@ public class RefreshTokenCleanupScheduler {
     @Scheduled(cron = "${cleanup.cron}")
     public void cleanupExpiredTokens() {
         refreshTokenRepository.deleteExpiredOrRevoked(LocalDateTime.now());
-        logger.info("Expired and revoked refresh tokens cleaned up");
+        LOGGER.info("Expired and revoked refresh tokens cleaned up");
     }
 }
