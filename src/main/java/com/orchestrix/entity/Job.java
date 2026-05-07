@@ -47,10 +47,10 @@ public class Job {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "createdAt")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "createdAt")
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     protected Job() {
