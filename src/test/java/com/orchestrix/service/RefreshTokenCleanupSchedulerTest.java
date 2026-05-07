@@ -1,6 +1,7 @@
 package com.orchestrix.service;
 
 import com.orchestrix.repository.RefreshTokenRepository;
+import com.orchestrix.service.auth.RefreshTokenCleanupScheduler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

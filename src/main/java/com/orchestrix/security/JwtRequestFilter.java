@@ -1,6 +1,6 @@
 package com.orchestrix.security;
 
-import com.orchestrix.entity.Role;
+import com.orchestrix.entity.auth.Role;
 import io.jsonwebtoken.JwtException;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
@@ -17,7 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 public class JwtRequestFilter extends OncePerRequestFilter {
-    private static final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtRequestFilter.class);
 
     private final JwtService jwtService;
     private final TokenBlacklistService tokenBlacklistService;
@@ -44,7 +44,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             Role role = jwtService.extractRole(token);
 
             if (tokenBlacklistService.isBlacklisted(token)) {
-                logger.warn("Blacklisted token used by: {}", email);
+                LOGGER.warn("Blacklisted token used by: {}", email);
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
@@ -57,7 +57,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         } catch (JwtException exc) {
-            logger.warn("Invalid JWT token: {}", exc.getMessage());
+            LOGGER.warn("Invalid JWT token: {}", exc.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }

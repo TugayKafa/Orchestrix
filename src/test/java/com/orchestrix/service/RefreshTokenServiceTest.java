@@ -1,14 +1,15 @@
 package com.orchestrix.service;
 
-import com.orchestrix.entity.AuthProvider;
-import com.orchestrix.entity.RefreshToken;
-import com.orchestrix.entity.Role;
-import com.orchestrix.entity.User;
+import com.orchestrix.entity.auth.AuthProvider;
+import com.orchestrix.entity.auth.RefreshToken;
+import com.orchestrix.entity.auth.Role;
+import com.orchestrix.entity.auth.User;
 import com.orchestrix.exception.RefreshTokenExpiredException;
 import com.orchestrix.exception.RefreshTokenNotFoundException;
 import com.orchestrix.exception.RefreshTokenRevokedException;
 import com.orchestrix.repository.RefreshTokenRepository;
 import com.orchestrix.security.JwtService;
+import com.orchestrix.service.auth.RefreshTokenServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,11 +40,11 @@ public class RefreshTokenServiceTest {
     private JwtService jwtService;
 
     @InjectMocks
-    private RefreshTokenService refreshTokenService;
+    private RefreshTokenServiceImpl refreshTokenService;
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() throws Exception {
-        Field expirationField = RefreshTokenService.class.getDeclaredField("expirationWeeks");
+        Field expirationField = RefreshTokenServiceImpl.class.getDeclaredField("expirationWeeks");
         expirationField.setAccessible(true);
         expirationField.set(refreshTokenService, 1);
     }

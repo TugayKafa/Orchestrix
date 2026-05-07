@@ -1,7 +1,7 @@
-package com.orchestrix.service;
+package com.orchestrix.service.auth;
 
-import com.orchestrix.entity.RefreshToken;
-import com.orchestrix.entity.User;
+import com.orchestrix.entity.auth.RefreshToken;
+import com.orchestrix.entity.auth.User;
 import com.orchestrix.exception.RefreshTokenExpiredException;
 import com.orchestrix.exception.RefreshTokenNotFoundException;
 import com.orchestrix.exception.RefreshTokenRevokedException;
@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class RefreshTokenService {
+public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtService jwtService;
@@ -23,17 +23,19 @@ public class RefreshTokenService {
     @Value("${refresh-token.expiration-weeks}")
     private int expirationWeeks;
 
-    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, JwtService jwtService) {
+    public RefreshTokenServiceImpl(RefreshTokenRepository refreshTokenRepository, JwtService jwtService) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.jwtService = jwtService;
     }
 
+    @Override
     public RefreshToken generateRefreshToken(User user) {
         RefreshToken refreshToken = new RefreshToken(user, UUID.randomUUID().toString(), expirationWeeks);
         refreshTokenRepository.save(refreshToken);
         return refreshToken;
     }
 
+    @Override
     public String generateAccessToken(String token) {
         RefreshToken refreshToken = findRefreshToken(token);
 
@@ -43,6 +45,7 @@ public class RefreshTokenService {
         );
     }
 
+    @Override
     public void revokeToken(String token) {
         RefreshToken refreshToken = findRefreshToken(token);
         refreshToken.revokeToken();

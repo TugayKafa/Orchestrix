@@ -1,4 +1,4 @@
-package com.orchestrix.entity;
+package com.orchestrix.entity.auth;
 
 public enum AuthProvider {
     LOCAL,

@@ -1,16 +1,16 @@
 package com.orchestrix.controller;
 
-import com.orchestrix.dto.AccessTokenResponse;
-import com.orchestrix.dto.AuthResponse;
-import com.orchestrix.dto.LoginRequest;
-import com.orchestrix.dto.RefreshRequest;
-import com.orchestrix.dto.RegisterRequest;
-import com.orchestrix.entity.User;
+import com.orchestrix.dto.auth.AccessTokenResponse;
+import com.orchestrix.dto.auth.AuthResponse;
+import com.orchestrix.dto.auth.LoginRequest;
+import com.orchestrix.dto.auth.RefreshRequest;
+import com.orchestrix.dto.auth.RegisterRequest;
+import com.orchestrix.entity.auth.User;
 import com.orchestrix.security.JwtService;
 import com.orchestrix.security.SecurityConstants;
 import com.orchestrix.security.TokenBlacklistService;
-import com.orchestrix.service.RefreshTokenService;
-import com.orchestrix.service.UserService;
+import com.orchestrix.service.auth.RefreshTokenServiceImpl;
+import com.orchestrix.service.userService.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -25,16 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final JwtService jwtService;
-    private final RefreshTokenService refreshTokenService;
+    private final RefreshTokenServiceImpl refreshTokenService;
     private final TokenBlacklistService tokenBlacklistService;
 
-    public AuthController(UserService userService,
+    public AuthController(UserServiceImpl userService,
                           JwtService jwtService,
-                          RefreshTokenService refreshTokenService,
+                          RefreshTokenServiceImpl refreshTokenService,
                           TokenBlacklistService tokenBlacklistService
     ) {
         this.userService = userService;
@@ -46,14 +46,14 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterRequest request) {
         User user = userService.register(request.email(), request.password(), request.firstName(), request.lastName());
-        logger.info("User registered: {}", user.getEmail());
+        LOGGER.info("User registered: {}", user.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).body(buildAuthResponse(user));
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
         User user = userService.login(request.email(), request.password());
-        logger.info("User logged in: {}", user.getEmail());
+        LOGGER.info("User logged in: {}", user.getEmail());
         return ResponseEntity.ok().body(buildAuthResponse(user));
     }
 
@@ -66,7 +66,7 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<AccessTokenResponse> refreshToken(@RequestBody @Valid RefreshRequest request) {
         String accessToken = refreshTokenService.generateAccessToken(request.token());
-        logger.info("Access token refreshed");
+        LOGGER.info("Access token refreshed");
         return ResponseEntity.ok(new AccessTokenResponse(accessToken));
     }
 
@@ -81,7 +81,7 @@ public class AuthController {
             tokenBlacklistService.blacklist(accessToken);
         }
 
-        logger.info("User logged out");
+        LOGGER.info("User logged out");
         return ResponseEntity.noContent().build();
     }
 }

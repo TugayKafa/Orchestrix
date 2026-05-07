@@ -1,6 +1,6 @@
 package com.orchestrix.security;
 
-import com.orchestrix.entity.Role;
+import com.orchestrix.entity.auth.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
