@@ -80,7 +80,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String accessToken = jwtService.generateToken(user.getEmail(), user.getRole());
         String refreshToken = refreshTokenService.generateRefreshToken(user).getToken();
 
-        response.sendRedirect("/index.html?accessToken=" + accessToken + "&refreshToken=" + refreshToken);
+        response.sendRedirect("http://localhost:4200/oauth-callback?accessToken=" + accessToken + "&refreshToken=" + refreshToken);
     }
 
     private AuthProvider extractProvider(Authentication authentication) {
