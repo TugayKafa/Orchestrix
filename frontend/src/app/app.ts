@@ -11,6 +11,18 @@ import { Auth } from './services/auth';
 export class App {
   protected readonly title = signal('frontend');
   protected auth = inject(Auth);
+  protected theme = signal(localStorage.getItem('orchestrix_theme') || 'dark');
+
+  constructor() {
+    document.documentElement.setAttribute('data-theme', this.theme());
+  }
+
+  toggleTheme() {
+    const next = this.theme() === 'dark' ? 'light' : 'dark';
+    this.theme.set(next);
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('orchestrix_theme', next);
+  }
 
   logout() {
     this.auth.logout().subscribe({

@@ -119,6 +119,27 @@ a:hover {
   gap: 12px;
 }
 
+/* --- Theme Toggle --- */
+.theme-toggle {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  color: var(--text-secondary);
+  font-size: 1.15rem;
+}
+.theme-toggle:hover {
+  background: var(--bg-card);
+  color: var(--orange);
+  transform: rotate(20deg);
+}
+
 /* --- Buttons --- */
 .btn {
   display: inline-flex;

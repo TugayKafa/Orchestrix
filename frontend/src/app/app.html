@@ -4,11 +4,17 @@
       <img src="assets/img/logo-icon-no-bg.png" alt="Orchestrix" height="36">
       <span>Orchestrix</span>
     </a>
-    @if (auth.loggedIn()) {
-      <div class="navbar-actions">
+    <div class="navbar-actions">
+      <button class="theme-toggle" (click)="toggleTheme()" aria-label="Toggle theme">
+        <span class="theme-icon">{{ theme() === 'dark' ? '☾' : '☀' }}</span>
+      </button>
+      @if (auth.loggedIn()) {
         <button class="btn btn-secondary" (click)="logout()">Log Out</button>
-      </div>
-    }
+      } @else {
+        <a routerLink="/login" class="btn btn-ghost">Sign In</a>
+        <a routerLink="/register" class="btn btn-primary">Sign Up</a>
+      }
+    </div>
   </div>
 </nav>
 
