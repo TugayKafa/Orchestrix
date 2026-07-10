@@ -1,11 +1,11 @@
 package com.orchestrix.security;
 
-import com.orchestrix.entity.AuthProvider;
-import com.orchestrix.entity.RefreshToken;
-import com.orchestrix.entity.Role;
-import com.orchestrix.entity.User;
-import com.orchestrix.service.RefreshTokenService;
-import com.orchestrix.service.UserService;
+import com.orchestrix.entity.auth.AuthProvider;
+import com.orchestrix.entity.auth.RefreshToken;
+import com.orchestrix.entity.auth.Role;
+import com.orchestrix.entity.auth.User;
+import com.orchestrix.service.auth.RefreshTokenServiceImpl;
+import com.orchestrix.service.userService.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -28,13 +28,13 @@ import static org.mockito.Mockito.when;
 public class OAuth2LoginSuccessHandlerTest {
 
     @Mock
-    UserService userService;
+    UserServiceImpl userService;
 
     @Mock
     JwtService jwtService;
 
     @Mock
-    RefreshTokenService refreshTokenService;
+    RefreshTokenServiceImpl refreshTokenService;
 
     @InjectMocks
     OAuth2LoginSuccessHandler successHandler;

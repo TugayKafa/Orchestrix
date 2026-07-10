@@ -52,7 +52,7 @@
         <appender-ref ref="AUTH_FILE"/>
         <appender-ref ref="CONSOLE"/>
     </logger>
-    <logger name="com.orchestrix.service.UserService" level="INFO" additivity="false">
+    <logger name="com.orchestrix.service.userService.UserServiceImpl" level="INFO" additivity="false">
         <appender-ref ref="AUTH_FILE"/>
         <appender-ref ref="CONSOLE"/>
     </logger>
@@ -68,11 +68,11 @@
     </logger>
 
     <!-- App loggers -->
-    <logger name="com.orchestrix.service.RefreshTokenService" level="INFO" additivity="false">
+    <logger name="com.orchestrix.service.auth.RefreshTokenServiceImpl" level="INFO" additivity="false">
         <appender-ref ref="APP_FILE"/>
         <appender-ref ref="CONSOLE"/>
     </logger>
-    <logger name="com.orchestrix.service.RefreshTokenCleanupScheduler" level="INFO" additivity="false">
+    <logger name="com.orchestrix.service.auth.RefreshTokenCleanupScheduler" level="INFO" additivity="false">
         <appender-ref ref="APP_FILE"/>
         <appender-ref ref="CONSOLE"/>
     </logger>

@@ -1,10 +1,10 @@
 package com.orchestrix.security;
 
-import com.orchestrix.entity.AuthProvider;
-import com.orchestrix.entity.OAuthUserInfo;
-import com.orchestrix.entity.User;
-import com.orchestrix.service.RefreshTokenService;
-import com.orchestrix.service.UserService;
+import com.orchestrix.entity.auth.AuthProvider;
+import com.orchestrix.entity.auth.OAuthUserInfo;
+import com.orchestrix.entity.auth.User;
+import com.orchestrix.service.auth.RefreshTokenServiceImpl;
+import com.orchestrix.service.userService.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ import java.util.Map;
 
 @Component
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    private static final Logger logger = LoggerFactory.getLogger(OAuth2LoginSuccessHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OAuth2LoginSuccessHandler.class);
     private static final String ATTR_EMAIL = "email";
     private static final String ATTR_GIVEN_NAME = "given_name";
     private static final String ATTR_FAMILY_NAME = "family_name";
@@ -36,14 +36,14 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private static final String GITHUB_NAME_SEPARATOR = " ";
     private static final String GITHUB_EMAILS_API = "https://api.github.com/user/emails";
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final JwtService jwtService;
-    private final RefreshTokenService refreshTokenService;
+    private final RefreshTokenServiceImpl refreshTokenService;
     private final OAuth2AuthorizedClientService authorizedClientService;
     private final RestTemplate restTemplate;
 
     public OAuth2LoginSuccessHandler(
-            UserService userService, JwtService jwtService, RefreshTokenService refreshTokenService,
+            UserServiceImpl userService, JwtService jwtService, RefreshTokenServiceImpl refreshTokenService,
             OAuth2AuthorizedClientService authorizedClientService) {
         this.userService = userService;
         this.jwtService = jwtService;
@@ -70,12 +70,12 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         User user = userService.findByEmail(userInfo.email())
                 .orElseGet(() -> {
-                    logger.info("New OAuth2 user registered via {}: {}", provider, userInfo.email());
+                    LOGGER.info("New OAuth2 user registered via {}: {}", provider, userInfo.email());
                     return userService.createOAuthUser(
                             userInfo.email(), userInfo.firstName(), userInfo.lastName(), provider);
                 });
 
-        logger.info("OAuth2 login via {}: {}", provider, user.getEmail());
+        LOGGER.info("OAuth2 login via {}: {}", provider, user.getEmail());
 
         String accessToken = jwtService.generateToken(user.getEmail(), user.getRole());
         String refreshToken = refreshTokenService.generateRefreshToken(user).getToken();
@@ -129,7 +129,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 .build();
 
         List<Map<String, Object>> emails = restTemplate.exchange(
-                request, new ParameterizedTypeReference<List<Map<String, Object>>>() {}).getBody();
+                request, new ParameterizedTypeReference<List<Map<String, Object>>>() { }).getBody();
 
         if (emails != null) {
             for (Map<String, Object> entry : emails) {
@@ -139,7 +139,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             }
         }
 
-        logger.warn("Could not fetch primary email from GitHub");
+        LOGGER.warn("Could not fetch primary email from GitHub");
         return null;
     }
 }

@@ -1,6 +1,6 @@
 package com.orchestrix.security;
 
-import com.orchestrix.entity.Role;
+import com.orchestrix.entity.auth.Role;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

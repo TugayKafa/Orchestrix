@@ -1,6 +1,6 @@
-package com.orchestrix.repository;
+package com.orchestrix.repository.userRepository;
 
-import com.orchestrix.entity.User;
+import com.orchestrix.entity.auth.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
