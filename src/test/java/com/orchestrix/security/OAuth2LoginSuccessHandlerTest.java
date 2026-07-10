@@ -65,7 +65,7 @@ public class OAuth2LoginSuccessHandlerTest {
 
         verify(userService).createOAuthUser("ivan@gmail.com", "Ivan", "Ivanov",
                 AuthProvider.GOOGLE);
-        verify(response).sendRedirect("/index.html?accessToken=access-token&refreshToken=refresh-token");
+        verify(response).sendRedirect("http://localhost:4200/oauth-callback?accessToken=access-token&refreshToken=refresh-token");
     }
 
     @Test
@@ -91,7 +91,7 @@ public class OAuth2LoginSuccessHandlerTest {
         successHandler.onAuthenticationSuccess(request, response, authentication);
 
         verify(userService, never()).createOAuthUser(any(), any(), any(), any());
-        verify(response).sendRedirect("/index.html?accessToken=access-token&refreshToken=refresh-token");
+        verify(response).sendRedirect("http://localhost:4200/oauth-callback?accessToken=access-token&refreshToken=refresh-token");
     }
 
     @Test
@@ -119,7 +119,7 @@ public class OAuth2LoginSuccessHandlerTest {
 
         verify(userService).createOAuthUser("ivan@github.com", "Ivan", "Ivanov",
                 AuthProvider.GITHUB);
-        verify(response).sendRedirect("/index.html?accessToken=access-token&refreshToken=refresh-token");
+        verify(response).sendRedirect("http://localhost:4200/oauth-callback?accessToken=access-token&refreshToken=refresh-token");
     }
 
     @Test
@@ -147,7 +147,7 @@ public class OAuth2LoginSuccessHandlerTest {
 
         verify(userService).createOAuthUser("ivan@github.com", "Ivan", "",
                 AuthProvider.GITHUB);
-        verify(response).sendRedirect("/index.html?accessToken=access-token&refreshToken=refresh-token");
+        verify(response).sendRedirect("http://localhost:4200/oauth-callback?accessToken=access-token&refreshToken=refresh-token");
     }
 
     private OAuth2AuthenticationToken buildAuthToken(OAuth2User oAuth2User, String registrationId) {
