@@ -33,13 +33,13 @@
 <section class="section-about">
   <div class="container">
     <div class="about-grid">
-      <div class="about-text">
+      <div class="about-text reveal">
         <span class="section-label">What is Orchestrix?</span>
         <h2>Priority-Based Task Scheduler with Dependency Resolution</h2>
         <p>Orchestrix is a task management system that understands dependencies between tasks. Instead of manually organizing execution order, simply define which tasks depend on what and assign their priorities.</p>
         <p>The system automatically detects circular dependencies, offers retry for failed tasks, and keeps a full history of every execution. Whether you have 5 or 500 tasks, Orchestrix arranges them in the optimal order.</p>
       </div>
-      <div class="about-visual">
+      <div class="about-visual reveal reveal-delay-1">
         <div class="about-card-stack">
           <div class="mini-card">
             <div class="mc-dot purple"></div>
@@ -64,12 +64,12 @@
 
 <section class="section-steps">
   <div class="container">
-    <div class="section-header">
+    <div class="section-header reveal">
       <span class="section-label">How it works</span>
       <h2>Three simple steps</h2>
     </div>
     <div class="steps-grid">
-      <div class="step-card">
+      <div class="step-card reveal">
         <div class="step-number">01</div>
         <div class="step-icon-wrap purple">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -77,10 +77,10 @@
         <h3>Create Tasks</h3>
         <p>Define jobs with a name, description, and priority. Each task can be scheduled for execution or rerouted.</p>
       </div>
-      <div class="step-connector">
+      <div class="step-connector reveal">
         <svg width="40" height="2"><line x1="0" y1="1" x2="40" y2="1" stroke="var(--border)" stroke-width="2" stroke-dasharray="6 4"/></svg>
       </div>
-      <div class="step-card">
+      <div class="step-card reveal reveal-delay-1">
         <div class="step-number">02</div>
         <div class="step-icon-wrap blue">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
@@ -88,10 +88,10 @@
         <h3>Link Dependencies</h3>
         <p>Define which tasks depend on which. Orchestrix automatically checks for circular dependencies.</p>
       </div>
-      <div class="step-connector">
+      <div class="step-connector reveal">
         <svg width="40" height="2"><line x1="0" y1="1" x2="40" y2="1" stroke="var(--border)" stroke-width="2" stroke-dasharray="6 4"/></svg>
       </div>
-      <div class="step-card">
+      <div class="step-card reveal reveal-delay-2">
         <div class="step-number">03</div>
         <div class="step-icon-wrap teal">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -106,19 +106,19 @@
 <section class="section-stats">
   <div class="container">
     <div class="stats-grid">
-      <div class="stat-card">
+      <div class="stat-card reveal">
         <div class="stat-number gradient-text">11</div>
         <div class="stat-label">API Endpoints</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card reveal reveal-delay-1">
         <div class="stat-number gradient-text">8</div>
         <div class="stat-label">Pages</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card reveal reveal-delay-2">
         <div class="stat-number gradient-text">100<span class="stat-unit">%</span></div>
         <div class="stat-label">Automation</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card reveal reveal-delay-3">
         <div class="stat-number gradient-text">0<span class="stat-unit">ms</span></div>
         <div class="stat-label">Downtime Goal</div>
       </div>
@@ -129,7 +129,7 @@
 @if (!auth.loggedIn()) {
   <section class="section-cta">
     <div class="container">
-      <div class="cta-box">
+      <div class="cta-box reveal">
         <h2>Ready to orchestrate your tasks?</h2>
         <p>Sign up for free and start using Orchestrix in minutes.</p>
         <div class="cta-buttons">
