@@ -1,5 +1,5 @@
 import { Service, inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
 
 interface AuthResponse {
@@ -20,13 +20,13 @@ export class Auth {
   register(email: string, password: string, firstName: string, lastName: string) {
     return this.http
       .post<AuthResponse>(`${this.apiUrl}/register`, { email, password, firstName, lastName })
-      .pipe(tap((response) => this.storeTokens(response)));
+      .pipe(tap((response) => this.storeTokens(response.accessToken, response.refreshToken)));
   }
 
   login(email: string, password: string) {
     return this.http
       .post<AuthResponse>(`${this.apiUrl}/login`, { email, password })
-      .pipe(tap((response) => this.storeTokens(response)));
+      .pipe(tap((response) => this.storeTokens(response.accessToken, response.refreshToken)));
   }
 
   refresh(token: string) {
@@ -34,20 +34,18 @@ export class Auth {
   }
 
   logout() {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.getAccessToken()}`);
-
     return this.http
-      .post<void>(`${this.apiUrl}/logout`, { token: this.getRefreshToken() }, { headers })
+      .post<void>(`${this.apiUrl}/logout`, { token: this.getRefreshToken() })
       .pipe(tap(() => this.clearTokens()));
+  }
+
+  storeTokens(accessToken: string, refreshToken: string) {
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
   }
 
   isLoggedIn(): boolean {
     return !!this.getAccessToken();
-  }
-
-  private storeTokens(response: AuthResponse) {
-    localStorage.setItem('accessToken', response.accessToken);
-    localStorage.setItem('refreshToken', response.refreshToken);
   }
 
   private getAccessToken() {
