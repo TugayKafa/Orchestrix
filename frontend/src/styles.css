@@ -255,6 +255,12 @@ a:hover {
   transform: rotate(45deg);
 }
 
+.anim-fade-in { opacity: 0; transform: translateY(20px); animation: animFadeIn 0.8s ease forwards; }
+.anim-delay-1 { animation-delay: 0.15s; } .anim-delay-2 { animation-delay: 0.3s; }
+.anim-delay-3 { animation-delay: 0.45s; } .anim-delay-4 { animation-delay: 0.6s; }
+.anim-delay-5 { animation-delay: 0.9s; }
+@keyframes animFadeIn { to { opacity: 1; transform: translateY(0); } }
+
 /* --- Auth Page Layout --- */
 .auth-page {
   min-height: 100vh;
