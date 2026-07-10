@@ -1,5 +1,154 @@
-<h1>Orchestrix</h1>
-<p>Priority-based task scheduler with dependency resolution.</p>
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge anim-fade-in">Priority-Based Task Scheduling</div>
+    <svg class="hero-logo anim-fade-in anim-delay-1" width="120" height="120" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 8 A42 42 0 1 1 15 72" stroke="var(--navy)" stroke-width="10" stroke-linecap="round" fill="none" opacity="0.85"/>
+      <path d="M70 35 L80 28 L85 35 L78 38Z" fill="var(--navy)"/>
+      <path d="M75 50 L85 45 L88 52 L80 53Z" fill="var(--navy)"/>
+      <path d="M70 65 L80 68 L78 76 L72 72Z" fill="var(--navy)"/>
+      <rect x="14" y="38" width="16" height="16" rx="3" fill="#7B5EA7"/>
+      <rect x="38" y="38" width="16" height="16" rx="3" fill="#4A7FD4"/>
+      <rect x="55" y="22" width="14" height="14" rx="3" fill="#3DB89A"/>
+      <rect x="55" y="55" width="14" height="14" rx="3" fill="#E8943A"/>
+      <line x1="30" y1="46" x2="38" y2="46" stroke="var(--navy)" stroke-width="2.5"/>
+      <line x1="54" y1="42" x2="57" y2="32" stroke="var(--navy)" stroke-width="2"/>
+      <line x1="54" y1="50" x2="57" y2="58" stroke="var(--navy)" stroke-width="2"/>
+    </svg>
+    <p class="tagline anim-fade-in anim-delay-2">Orchestrate. Prioritize. Execute.</p>
+    <h1 class="anim-fade-in anim-delay-2"><span class="brand-name">Orchestrix</span></h1>
+    <p class="description anim-fade-in anim-delay-3">
+      An intelligent task scheduler with automatic dependency resolution.
+      Create jobs with priorities, define relationships between them, and let Orchestrix determine
+      the optimal execution order.
+    </p>
+    <div class="hero-buttons anim-fade-in anim-delay-4">
+      @if (!auth.loggedIn()) {
+        <a routerLink="/register" class="btn btn-primary btn-lg">Get Started Free</a>
+        <a routerLink="/login" class="btn btn-secondary btn-lg">Already have an account?</a>
+      }
+    </div>
+  </div>
+</section>
 
-<a routerLink="/login">Login</a>
-<a routerLink="/register">Register</a>
+<section class="section-about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <span class="section-label">What is Orchestrix?</span>
+        <h2>Priority-Based Task Scheduler with Dependency Resolution</h2>
+        <p>Orchestrix is a task management system that understands dependencies between tasks. Instead of manually organizing execution order, simply define which tasks depend on what and assign their priorities.</p>
+        <p>The system automatically detects circular dependencies, offers retry for failed tasks, and keeps a full history of every execution. Whether you have 5 or 500 tasks, Orchestrix arranges them in the optimal order.</p>
+      </div>
+      <div class="about-visual">
+        <div class="about-card-stack">
+          <div class="mini-card">
+            <div class="mc-dot purple"></div>
+            <div class="mc-lines"><div class="mc-line w80"></div><div class="mc-line w50"></div></div>
+            <div class="mc-badge priority-high">P1</div>
+          </div>
+          <div class="mini-card">
+            <div class="mc-dot blue"></div>
+            <div class="mc-lines"><div class="mc-line w70"></div><div class="mc-line w40"></div></div>
+            <div class="mc-badge priority-mid">P2</div>
+          </div>
+          <div class="mini-card">
+            <div class="mc-dot teal"></div>
+            <div class="mc-lines"><div class="mc-line w60"></div><div class="mc-line w80"></div></div>
+            <div class="mc-badge priority-low">P3</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-steps">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">How it works</span>
+      <h2>Three simple steps</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <div class="step-icon-wrap purple">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <h3>Create Tasks</h3>
+        <p>Define jobs with a name, description, and priority. Each task can be scheduled for execution or rerouted.</p>
+      </div>
+      <div class="step-connector">
+        <svg width="40" height="2"><line x1="0" y1="1" x2="40" y2="1" stroke="var(--border)" stroke-width="2" stroke-dasharray="6 4"/></svg>
+      </div>
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <div class="step-icon-wrap blue">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        </div>
+        <h3>Link Dependencies</h3>
+        <p>Define which tasks depend on which. Orchestrix automatically checks for circular dependencies.</p>
+      </div>
+      <div class="step-connector">
+        <svg width="40" height="2"><line x1="0" y1="1" x2="40" y2="1" stroke="var(--border)" stroke-width="2" stroke-dasharray="6 4"/></svg>
+      </div>
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <div class="step-icon-wrap teal">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h3>Execute Automatically</h3>
+        <p>The scheduler arranges tasks by priority and dependencies. If something fails, retry with a single click.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number gradient-text">11</div>
+        <div class="stat-label">API Endpoints</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number gradient-text">8</div>
+        <div class="stat-label">Pages</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number gradient-text">100<span class="stat-unit">%</span></div>
+        <div class="stat-label">Automation</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number gradient-text">0<span class="stat-unit">ms</span></div>
+        <div class="stat-label">Downtime Goal</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+@if (!auth.loggedIn()) {
+  <section class="section-cta">
+    <div class="container">
+      <div class="cta-box">
+        <h2>Ready to orchestrate your tasks?</h2>
+        <p>Sign up for free and start using Orchestrix in minutes.</p>
+        <div class="cta-buttons">
+          <a routerLink="/register" class="btn btn-primary btn-lg">Create Account</a>
+          <a routerLink="/login" class="btn btn-secondary btn-lg">Sign In</a>
+        </div>
+      </div>
+    </div>
+  </section>
+}
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/img/logo-icon-no-bg.png" alt="Orchestrix" height="24">
+        <span>Orchestrix</span>
+      </div>
+      <p>&copy; 2026 Orchestrix. Orchestrate. Prioritize. Execute.</p>
+    </div>
+  </div>
+</footer>
