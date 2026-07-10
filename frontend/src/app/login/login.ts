@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms'
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Auth } from '../services/auth';
 
 @Component({
   selector: 'app-login',
@@ -7,13 +8,15 @@ import { FormsModule } from '@angular/forms'
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-
 export class Login {
+  private auth = inject(Auth);
   email = '';
   password = '';
 
   login() {
-    console.log('Email:', this.email);
-    console.log('Password:', this.password);
+    this.auth.login(this.email, this.password).subscribe({
+      next: (response) => console.log('Login success:', response),
+      error: (err) => console.error('Login failed:', err),
+    });
   }
 }

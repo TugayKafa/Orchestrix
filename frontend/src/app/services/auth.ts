@@ -1,4 +1,4 @@
-import { Service } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 interface AuthResponse {
@@ -13,9 +13,8 @@ interface AccessTokenResponse {
 
 @Service()
 export class Auth {
+  private http = inject(HttpClient);
   private apiUrl = 'http://localhost:8080/api/auth';
-
-  constructor(private http: HttpClient) {}
 
   register(email: string, password: string, firstName: string, lastName: string) {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, { email, password, firstName, lastName });
