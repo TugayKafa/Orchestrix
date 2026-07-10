@@ -4,14 +4,11 @@
       <img src="assets/img/logo-icon-no-bg.png" alt="Orchestrix" height="36">
       <span>Orchestrix</span>
     </a>
-    <div class="navbar-actions">
-      @if (auth.loggedIn()) {
+    @if (auth.loggedIn()) {
+      <div class="navbar-actions">
         <button class="btn btn-secondary" (click)="logout()">Log Out</button>
-      } @else {
-        <a routerLink="/login" class="btn btn-ghost">Sign In</a>
-        <a routerLink="/register" class="btn btn-primary">Sign Up</a>
-      }
-    </div>
+      </div>
+    }
   </div>
 </nav>
 
