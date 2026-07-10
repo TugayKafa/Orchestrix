@@ -1,8 +1,8 @@
-<nav>
+<nav style="position: fixed; top: 16px; right: 16px; z-index: 10;">
   @if (auth.loggedIn()) {
-    <button (click)="logout()">Logout</button>
+    <button (click)="logout()" class="btn btn-secondary">Logout</button>
   } @else {
-    <a routerLink="/login">Login</a>
+    <a routerLink="/login" class="btn btn-secondary">Login</a>
   }
 </nav>
 
