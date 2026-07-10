@@ -1,4 +1,4 @@
-import { Service, inject } from '@angular/core';
+import { Service, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
 
@@ -16,6 +16,8 @@ interface AccessTokenResponse {
 export class Auth {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:8080/api/auth';
+
+  loggedIn = signal(!!this.getAccessToken());
 
   register(email: string, password: string, firstName: string, lastName: string) {
     return this.http
@@ -42,10 +44,7 @@ export class Auth {
   storeTokens(accessToken: string, refreshToken: string) {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
-  }
-
-  isLoggedIn(): boolean {
-    return !!this.getAccessToken();
+    this.loggedIn.set(true);
   }
 
   private getAccessToken() {
@@ -59,5 +58,6 @@ export class Auth {
   private clearTokens() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    this.loggedIn.set(false);
   }
 }

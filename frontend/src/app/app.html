@@ -1,2 +1,9 @@
+<nav>
+  @if (auth.loggedIn()) {
+    <button (click)="logout()">Logout</button>
+  } @else {
+    <a routerLink="/login">Login</a>
+  }
+</nav>
+
 <router-outlet />
-<button (click)="logout()" class="btn btn-secondary" style="position: fixed; top: 16px; right: 16px;">Logout</button>
